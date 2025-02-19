@@ -48,7 +48,7 @@ namespace BBCR.API
         }
         public T GetOrAddFromResources<T>(string resourceName, string key = null) where T : UnityEngine.Object
         {
-            if (key.IsNull()) key = resourceName;
+            if (key == null) key = resourceName;
             if (!Exists<T>(key)) AddFromResources<T>(resourceName, key);
             return Get<T>(key);
         }
@@ -59,7 +59,7 @@ namespace BBCR.API
         }
         public void AddFromResources<T>(string resourceName, string key = null) where T : UnityEngine.Object
         {
-            if (key.IsNull()) key = resourceName;
+            if (key == null) key = resourceName;
             T t = AssetsAPI.LoadAsset<T>(resourceName);
             Add<T>(key, t);
         }

@@ -21,35 +21,35 @@ namespace BBCR.Patches
             ParticleSystemRenderer p = __instance.gameObject.GetComponent<ParticleSystemRenderer>();
             foreach (Material mat in p.materials) 
             {
-                if (!mat.mainTexture.IsNull())
+                if (mat.mainTexture != null)
                     Graphics.CopyTexture(BasePlugin.assets.Get<Texture2D>("NewChalkCloud"), mat.mainTexture);
             }
             foreach (Material mat in p.sharedMaterials)
             {
-                if (!mat.mainTexture.IsNull())
+                if (mat.mainTexture != null)
                     Graphics.CopyTexture(BasePlugin.assets.Get<Texture2D>("NewChalkCloud"), mat.mainTexture);
             }
-            if (!p.sharedMaterial.mainTexture.IsNull())
+            if (p.sharedMaterial.mainTexture != null)
                 Graphics.CopyTexture(BasePlugin.assets.Get<Texture2D>("NewChalkCloud"), p.sharedMaterial.mainTexture);
-            if (!p.material.mainTexture.IsNull())
+            if (p.material.mainTexture != null)
                 Graphics.CopyTexture(BasePlugin.assets.Get<Texture2D>("NewChalkCloud"), p.material.mainTexture);
 
 
             ParticleSystemRenderer p2 = __instance.GetComponent<ParticleSystemRenderer>();
             foreach (Material mat in p2.materials)
             {
-                if (!mat.mainTexture.IsNull())
+                if (mat.mainTexture != null)
                     Graphics.CopyTexture(BasePlugin.assets.Get<Texture2D>("NewChalkCloud"), mat.mainTexture);
             }
             foreach (Material mat in p2.sharedMaterials)
             {
-                if (!mat.mainTexture.IsNull())
+                if (mat.mainTexture != null)
                     Graphics.CopyTexture(BasePlugin.assets.Get<Texture2D>("NewChalkCloud"), mat.mainTexture);
             }
 
-            if (!p2.sharedMaterial.mainTexture.IsNull())
+            if (p2.sharedMaterial.mainTexture != null)
                 Graphics.CopyTexture(BasePlugin.assets.Get<Texture2D>("NewChalkCloud"), p2.sharedMaterial.mainTexture);
-            if (!p2.material.mainTexture.IsNull())
+            if (p2.material.mainTexture != null)
                 Graphics.CopyTexture(BasePlugin.assets.Get<Texture2D>("NewChalkCloud"), p2.material.mainTexture);
         }
     }

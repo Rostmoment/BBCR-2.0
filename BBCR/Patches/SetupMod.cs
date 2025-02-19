@@ -27,16 +27,12 @@ namespace BBCR.Patches
             }
 
         }
-        //Canvas/warnings/Logo
-        [HarmonyPatch(typeof(SceneTimer), "OnDestroy")]
+        [HarmonyPatch(typeof(MainMenu), "Start")]
         [HarmonyPostfix]
-        private static void AddLoadingScreen(SceneTimer __instance)
+        private static void AddLoadingScreen(MainMenu __instance)
         {
-            BasePlugin.logger.LogMessage(__instance.name + "/"+__instance.scene.ToString()+"/"+SceneManager.GetActiveScene().name);
-            if (__instance.name.ToLower() == "canvas" && __instance.scene.ToLower() == "warnings" && SceneManager.GetActiveScene().name.ToLower() == "logo")
-            {
-                __instance.gameObject.AddComponent<LoadingScreen>();
-            }
+            if (!LoadingAPI.finished)
+                __instance.gameObject.AddComponent<LoadingSceen>().mainMenu = __instance;
         }
         [HarmonyPatch(typeof(GameLoader), "StartGame")]
         [HarmonyPrefix]

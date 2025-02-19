@@ -54,7 +54,7 @@ namespace BBCR.Patches.Styles
         [HarmonyPrefix]
         private static void UpdateFixer(ClassicNullManager __instance)
         {
-            if ((!__instance.finalElevator.IsNull() && !__instance.finalElevatorTargetTile.IsNull()) && ((!Singleton<CoreGameManager>.Instance.hardMode) || (Singleton<CoreGameManager>.Instance.hardMode && ElevatorsOpenedSecondTime)))
+            if ((__instance.finalElevator != null && __instance.finalElevatorTargetTile != null) && ((!Singleton<CoreGameManager>.Instance.hardMode) || (Singleton<CoreGameManager>.Instance.hardMode && ElevatorsOpenedSecondTime)))
             {
                 NullStyle.BossActive = __instance.bossActive;
                 NullNPC nullNpc = (NullNPC)__instance.ec.GetBaldi();
@@ -106,7 +106,7 @@ namespace BBCR.Patches.Styles
                     __instance.StartCoroutine(RageNull(__instance.nullNpc));
                     __instance.finalElevator = null;
                     __instance.finalElevatorTargetTile = null;
-                    __instance.ec.audMan.PlaySingle(AssetsAPI.LoadAsset<SoundObject>(x => !x.additionalKeys.Where(x => x.key == "Vfx_Null_ClassicSpeech4").IsNull()));
+                    __instance.ec.audMan.PlaySingle(AssetsAPI.LoadAsset<SoundObject>(x => x.additionalKeys.Where(x => x.key == "Vfx_Null_ClassicSpeech4") != null));
                 }
                 __instance.SpawnProjectile();
                 __instance.health += 1;

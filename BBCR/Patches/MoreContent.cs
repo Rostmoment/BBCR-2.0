@@ -23,16 +23,6 @@ namespace BBCR.Patches
             new Vector3(201, 0, 247),
             new Vector3(209, 0 ,323)
         };
-        [HarmonyPatch(typeof(ClassicDemoManager), "ActivityCompleted")]
-        [HarmonyPrefix]
-        private static void AddPartyEvent(ClassicDemoManager __instance)
-        {
-            if (!__instance.ec.events.Exists(x => x.eventType == RandomEventType.Party))
-            {
-                __instance.ec.events.Add(GameObject.Instantiate(BasePlugin.assets.GetOrAdd<PartyEvent>("PartyEventPrefab", Resources.FindObjectsOfTypeAll<PartyEvent>().Find(x => !x.IsNull()))));
-                __instance.ec.RandomizeEvents(__instance.ec.EventsCount, 30f, 30f, 180f, new System.Random());
-            }
-        }
         [HarmonyPatch(typeof(EnvironmentController), "SpawnNPCs")]
         [HarmonyPrefix]
         private static void AddPomp(EnvironmentController __instance)
@@ -70,7 +60,7 @@ namespace BBCR.Patches
             foreach (var data in positions)
             {
                 TileController tile = __instance.ec.TileFromPos(data.Key);
-                WaterFountain fountain = GameObject.Instantiate(BasePlugin.assets.GetOrAddFromResources<WaterFountain>("WaterFountainPrefab", 0));
+                WaterFountain fountain = GameObject.Instantiate(BasePlugin.assets.Get<WaterFountain>("WaterFountainPrefab"));
                 fountain.transform.SetParent(tile.transform, false);
                 fountain.transform.rotation = Quaternion.Euler(fountain.transform.rotation.x, data.Value, fountain.transform.rotation.z);
             }
@@ -82,7 +72,7 @@ namespace BBCR.Patches
             foreach (Vector3 vector in blueLockersVectors)
             {
                 TileController tile = __instance.ec.TileFromPos(vector);
-                HideableLocker locker = GameObject.Instantiate(BasePlugin.assets.GetOrAddFromResources<HideableLocker>("BlueLockerPrefab", 0));
+                HideableLocker locker = GameObject.Instantiate(BasePlugin.assets.Get<HideableLocker>("BlueLockerPrefab"));
                 locker.transform.SetParent(tile.transform, false);
                 locker.transform.position = vector;
                 foreach (Transform transform in __instance.ec.mainHall.transform.Find("RoomObjects").GetChilds())

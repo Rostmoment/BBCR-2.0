@@ -16,6 +16,7 @@ namespace BBCR
 {
     public enum Style
     {
+        Unknown = -1,
         Classic = 0,
         Party = 1,
         Demo = 2,

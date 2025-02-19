@@ -15,9 +15,9 @@ namespace BBCR.API
         public ItemObject Build<T>() where T : Item
         {
             ItemObject res = ScriptableObject.CreateInstance<ItemObject>();
-            if (large.IsNull() && small.IsNull()) small = Texture2D.whiteTexture.ToSprite();
-            if (large.IsNull()) large = small;
-            if (small.IsNull()) small = large;
+            if (large == null && small == null) small = Texture2D.whiteTexture.ToSprite();
+            if (large == null) large = small;
+            if (small == null) small = large;
             res.itemSpriteSmall = small;
             res.itemSpriteLarge = large;
             res.itemType = type;

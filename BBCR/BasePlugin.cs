@@ -24,13 +24,17 @@ namespace BBCR
             assets.Add("NotebookCounter", AssetsAPI.CreateTexture("NotebookIconSheet.png"));
             assets.Add("ExitCounter", AssetsAPI.CreateTexture("ExitIconSheet.png"));
 			assets.Add("NewChalkCloud", AssetsAPI.CreateTexture("NewChalk.png"));
-			//assets.AddFromResources<Texture2D>("ItemSlot5");
+            assets.Add("CoinDoorMaterial", AssetsAPI.CreateTexture("CoinDoor.png"));
+            assets.AddFromResources<Texture2D>("ItemSlot5");
             yield return "Creating sounds...";
-            assets.Add("ZestyBarEat", AssetsAPI.CreateSoundObject(AssetsAPI.AudioClipFromFile("ChipCrunch.wav"), SoundType.Effect, Color.white, 0.5f, " *CRUNCH*"));
+            assets.Add("ZestyBarEat", AssetsAPI.CreateSoundObject(AssetsAPI.AudioClipFromFile("ChipCrunch.wav"), SoundType.Effect, Color.white, 0.5f, "BBCRBE_Crunch"));
             assets.Add("NotebookCollect", AssetsAPI.CreateSoundObject(AssetsAPI.AudioClipFromFile("NotebookCollect.wav"), SoundType.Effect, sublength: 0));
 			yield return "Creating prefabs...";
-			/*BasePlugin.assets.AddFromResources<HideableLocker>("BlueLockerPrefab", 0);
-            BasePlugin.assets.AddFromResources<WaterFountain>("WaterFountainPrefab", 0);*/
+			BasePlugin.assets.AddFromResources<HideableLocker>("BlueLockerPrefab", 0);
+            BasePlugin.assets.AddFromResources<WaterFountain>("WaterFountainPrefab", 0);
+            BasePlugin.assets.AddFromResources<TMP_FontAsset>();
+			yield return "Loading languages...";
+			LanguageAPI.LoadAll();
         }
 		void Awake()
 		{

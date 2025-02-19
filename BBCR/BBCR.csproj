@@ -332,10 +332,6 @@
       <HintPath>..\Dependencies\UnityEngine.XRModule.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Patches\NPC\" />
-  </ItemGroup>
   
 
 </Project>

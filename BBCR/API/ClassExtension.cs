@@ -8,11 +8,30 @@ namespace BBCR
 {
     public static class ClassExtension
     {
+        public static void MakeCoinDoor(this SwingDoor swing)
+        {
+            if (swing == null)
+                return;
+            if (swing.overlayLocked.EmptyOrNull())
+                return;
+            CoinDoor coinDoor = swing.gameObject.AddComponent<CoinDoor>();
+            coinDoor.swingDoor = swing;
+            coinDoor.originalOverlays = new Material[] { };
+            coinDoor.coinDoorOverlay = new Material(swing.overlayLocked[0])
+            {
+                mainTexture = BasePlugin.assets.Get<Texture2D>("CoinDoorMaterial")
+            };
+        }
         public static T Find<T>(this T[] array, Func<T, bool> func)
         {
             IEnumerable<T> t = array.Where(func);
             if (t.Count() > 0) return t.First();
             return default(T);
+        }
+        public static bool EmptyOrNull<T>(this IEnumerable<T> values)
+        {
+            if (values == null) return true;
+            return values.Count() == 0;
         }
         public static float FontSize(this BaldiFonts font)
         {
@@ -67,6 +86,20 @@ namespace BBCR
             return UnityEngine.Resources.FindObjectsOfTypeAll<ItemObject>().Where(x => x.itemType == item).First();
         }
         public static bool IsNullOrGlitch(this Style style) => style == Style.Null || style == Style.Glitch;
+        public static T[] ChooseRandom<T>(this IEnumerable<T> list, int count)
+        {
+            if (list.Count() <= count)
+                return list.ToArray();
+            List<T> result = new List<T>();
+            List<T> tmp = list.ToList();
+            while (result.Count != count)
+            {
+                T add = tmp.ChooseRandom();
+                tmp.Remove(add);
+                result.Add(add);
+            }
+            return result.ToArray();
+        }
         public static T ChooseRandom<T>(this IEnumerable<T> list)
         {
             if (list.Count() == 0)
@@ -88,17 +121,16 @@ namespace BBCR
                     select x).First();
         }
         public static void SetMainTexture(this Material me, Texture texture) => me.SetTexture("_MainTex", texture);
-        public static bool IsNull(this object obj) => obj == null;
         public static bool DeleteComponent<T>(this GameObject obj) where T : Component
         {
-            if (obj.IsNull()) return false;
-            if (obj.GetComponent<T>().IsNull()) return false;
+            if (obj == null) return false;
+            if (obj.GetComponent<T>() == null) return false;
             GameObject.Destroy(obj.GetComponent<T>());
             return true;
         }
         public static T GetOrAddComponent<T>(this GameObject obj) where T : Component
         {
-            if (obj.GetComponent<T>().IsNull()) return obj.AddComponent<T>();
+            if (obj.GetComponent<T>() == null) return obj.AddComponent<T>();
             return obj.GetComponent<T>();
         }
         public static List<List<T>> SplitList<T>(this List<T> values, int chunkSize)

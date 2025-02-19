@@ -9,70 +9,75 @@ using UnityEngine.SceneManagement;
 
 namespace BBCR.API
 {
-    class LoadingScreen : MonoBehaviour
+    
+    class LoadingSceen : MonoBehaviour
     {
-        private TextMeshProUGUI text;
-        private IEnumerator current;
-        private List<IEnumerator> done;
-        private bool Done => finished >= LoadingAPI.enumerators.Count;
-        public static int finished;
-        private SceneTimer SceneTimer => gameObject.GetComponent<SceneTimer>();
+        private static LoadingSceen Instance;
+        private static TextMeshProUGUI text;
+        private int finished = 0;
+        private bool inProgress;
+        public MainMenu mainMenu;
         private void Awake()
         {
-            if (LoadingAPI.enumerators.IsNull()) LoadingAPI.enumerators = new List<IEnumerator>();
-            text = AssetsAPI.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans36, "Loading...", transform, new Vector3(240f, 272f), true);
-            text.fontSize = 36;
-            current = null;
-            done = new List<IEnumerator>();
-            finished = 0;
-            SceneTimer.enabled = false;
-            SceneTimer.transform.Find("RawImage").gameObject.SetActive(false);
+            inProgress = false;
+            Instance = this;
+            CursorController.Instance.DisableClick(true);
+            if (LoadingAPI.enumerators.EmptyOrNull())
+                Destroy(this);
+            if (LoadingAPI.finished) 
+                Destroy(this);
         }
         private void Update()
         {
-            if (Done)
+            try
             {
-                SceneTimer.transform.Find("RawImage").gameObject.SetActive(true);
-                SceneTimer.enabled = true;
-                SceneManager.LoadScene(SceneTimer.scene);
-                return;
+                if (finished == LoadingAPI.enumerators.Count)
+                    Destroy(this);
+                if (!mainMenu.unlockScreen.activeSelf)
+                    mainMenu.unlockScreen.SetActive(true);
+                if (!inProgress)
+                    StartLoading(LoadingAPI.enumerators[finished]);
             }
-            foreach (IEnumerator enumerator in LoadingAPI.enumerators.Where(x => !done.Contains(x)))
+            catch (ArgumentOutOfRangeException)
             {
-                if (current.IsNull())
-                {
-                    Begin(enumerator);
-                    break;
-                }
+
             }
         }
-        private void Begin(IEnumerator enumerator)
-        {
-            current = enumerator;
-            StartCoroutine(BeginLoading(enumerator));
+        private void OnDestroy()
+        {   
+            Instance = null;
+            LoadingAPI.finished = true;
+            mainMenu.unlockScreen.SetActive(false);
+            CursorController.Instance.DisableClick(false);
         }
-        private IEnumerator BeginLoading(IEnumerator enumerator)
+        private void StartLoading(IEnumerator toLoad)
         {
-            while (enumerator.MoveNext())
+            inProgress = true;
+            StartCoroutine(Loading(toLoad));
+        }
+        private IEnumerator Loading(IEnumerator toLoad)
+        {
+            while (toLoad.MoveNext())
             {
-                if (enumerator.Current.GetType() == typeof(string))
+                if (toLoad.Current.GetType() == typeof(string))
                 {
-                    text.text = enumerator.Current.ToString();
+                    mainMenu.unlockTmp.text = (string)toLoad.Current;
                 }
                 yield return null;
             }
-            done.Add(enumerator);
-            current = null;
+            inProgress = false;
             finished++;
             yield break;
         }
     }
     class LoadingAPI
     {
+        public static bool finished;
         public static List<IEnumerator> enumerators;
         public static void AddLoadingEvent(IEnumerator enumerator)
         {
-            if (enumerators.IsNull()) enumerators = new List<IEnumerator>();
+            finished = false;
+            if (enumerators == null) enumerators = new List<IEnumerator>();
             if (!enumerators.Contains(enumerator)) 
                 enumerators.Add(enumerator);
         }

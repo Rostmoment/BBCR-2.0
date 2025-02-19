@@ -66,7 +66,7 @@ namespace BBCR.Patches
         }
         void Update()
         {
-            if (!ec.IsNull() && !bgm.IsNull())
+            if (ec != null && bgm != null)
             {
                 if (animatorIndex > frames.Last().Key)
                 {

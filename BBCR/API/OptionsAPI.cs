@@ -122,13 +122,7 @@ namespace BBCR.API
             res.hotspot.GetComponent<StandardMenuButton>().text.text = text;
             res.gameObject.transform.Find("ToggleText").GetComponent<TMP_Text>().GetComponent<TextLocalizer>().key = text;
             res.gameObject.name = text;
-            res.hotspot.GetComponent<StandardMenuButton>().OnHighlight = new UnityEvent();
-            res.hotspot.GetComponent<StandardMenuButton>().OnHighlight.AddListener(() =>
-            {
-                menu.transform.Find("TooltipBase").Find("Tooltip").Find("BG").gameObject.SetActive(true);
-                menu.transform.Find("TooltipBase").Find("Tooltip").Find("Tmp").gameObject.SetActive(true);
-                menu.transform.Find("TooltipBase").Find("Tooltip").Find("Tmp").GetComponent<TextMeshProUGUI>().text = toolTip;
-            });
+            SetTooltip(res.hotspot.GetComponent<StandardMenuButton>(), toolTip);
             res.transform.SetParent(category.transform, false);
             res.Set(startState);
             res.transform.localPosition = new Vector3(position.x, position.y, 0);
@@ -214,13 +208,13 @@ namespace BBCR.API
         [HarmonyPostfix]
         private static void Awake(OptionsMenu __instance)
         {
-            if (!OnInitialize.IsNull()) OnInitialize(__instance);
+            if (OnInitialize != null) OnInitialize(__instance);
         }
         [HarmonyPatch("Close")]
         [HarmonyPostfix]
         private static void Close(OptionsMenu __instance)
         {
-            if (!OnClose.IsNull()) OnClose(__instance);
+            if (OnClose != null) OnClose(__instance);
         }
     }
 }
